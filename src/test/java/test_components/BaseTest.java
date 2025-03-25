@@ -28,6 +28,9 @@ public class BaseTest {
 			this.uri = properties.getProperty("uri.production");
 		}
 
+		// for dummy api testing hardcoding the uri property
+		this.uri = properties.getProperty("uri.dummy");
+
 		this.version = properties.getProperty("version");
 		this.username = properties.getProperty("username");
 	}
