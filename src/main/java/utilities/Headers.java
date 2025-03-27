@@ -1,9 +1,9 @@
-package hsbc.utilities;
+package utilities;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import hsbc.headers.CorporateToSparcHeaders;
+import headers.CorporateToSparcHeaders;
 
 /**
  * Modify the default values of the headers using this class.

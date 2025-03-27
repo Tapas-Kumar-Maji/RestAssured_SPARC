@@ -1,4 +1,4 @@
-package hsbc.headers;
+package headers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public enum CorporateToSparcHeaders {
 		for (CorporateToSparcHeaders header : CorporateToSparcHeaders.values()) {
 
 			if (headers_map.containsKey(header.getKey())) {
-				throw new IllegalArgumentException("Duplicate key found : " + header.getKey());
+				throw new IllegalArgumentException("Duplicate headers found : " + header.getKey());
 			}
 			headers_map.put(header.getKey(), header.getValue());
 

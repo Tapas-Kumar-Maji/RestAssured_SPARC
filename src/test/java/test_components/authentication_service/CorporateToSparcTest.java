@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import hsbc.utilities.ApiClient;
-import hsbc.utilities.Headers;
 import io.restassured.http.Method;
 import test_components.BaseTest;
+import utilities.ApiClient;
+import utilities.Headers;
 
 public class CorporateToSparcTest extends BaseTest {
 
