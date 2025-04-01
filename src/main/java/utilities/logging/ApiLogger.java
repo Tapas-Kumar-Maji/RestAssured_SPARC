@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +51,10 @@ public class ApiLogger implements Filter {
 		requestSpec.getCookies().asList()
 				.forEach(cookie -> logger.info("	{}: {}", cookie.getName(), cookie.getValue()));
 
+		logger.info("Multi Part Params:");
+		requestSpec.getMultiPartParams().stream().forEach(m -> logger.info("   Name: {}, FileName: {}, MIME Type: {}",
+				m.getControlName(), m.getFileName(), m.getMimeType()));
+
 		logger.info("Authentication Scheme: {}", requestSpec.getAuthenticationScheme());
 		logger.info("Config: {}", requestSpec.getConfig());
 		logger.info("Defined Filters: {}", requestSpec.getDefinedFilters());
@@ -88,7 +93,8 @@ public class ApiLogger implements Filter {
 		logger.info("Response Cookies:");
 		response.getCookies().forEach((key, value) -> logger.info("   {}: {}", key, value));
 
-		logger.info("Response Body:\n{}", response.getBody().asPrettyString());
+		String responseBody = Optional.ofNullable(response.getBody()).map(b -> b.asPrettyString()).orElse("[No Body]");
+		logger.info("Response Body:\n{}", responseBody);
 
 		return response;
 	}
