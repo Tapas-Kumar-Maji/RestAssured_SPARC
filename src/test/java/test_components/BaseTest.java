@@ -4,12 +4,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
 
 public class BaseTest {
 	public String uri = null;
 	public String version = null;
 	public String username = null;
+	private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
 	@BeforeSuite(alwaysRun = true)
 	public void setProperties() {
@@ -33,6 +38,18 @@ public class BaseTest {
 
 		this.version = properties.getProperty("version");
 		this.username = properties.getProperty("username");
+	}
+
+	/**
+	 * Logs stack trace into .log file.
+	 * 
+	 * @param result
+	 */
+	@AfterMethod(alwaysRun = true)
+	public void logStackTrace(ITestResult result) {
+		if (result.getStatus() == ITestResult.FAILURE) {
+			logger.error("Error : \n", result.getThrowable());
+		}
 	}
 
 	/**

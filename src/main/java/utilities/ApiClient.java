@@ -1,4 +1,4 @@
-package hsbc.utilities;
+package utilities;
 
 import static io.restassured.RestAssured.given;
 
