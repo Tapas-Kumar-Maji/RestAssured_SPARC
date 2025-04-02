@@ -71,20 +71,31 @@ public class DummyApiTest extends BaseTest {
 
 		Headers headers = new Headers();
 		Map<String, Object> headers_map_dummy = headers.addPlaceApi("application/json");
-		PostRequest postRequest = new PostRequest();
-		Response response = postRequest.setRequestDetails(this.uri, "/maps/api/place/add/json", new HashMap<>(),
-				new HashMap<>(), headers_map_dummy, new HashMap<>(), new HashMap<>(), addPlaceAPI_requestBody);
 
-//		if (response.jsonPath().get("scope") != null) {
-//			System.out.println("Scope : " + response.jsonPath().getString("scope"));
-//		} else {
-//			System.out.println("Field not found");
-//		}
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("key", "qaclick123");
+
+		PostRequest postRequest = new PostRequest();
+		Response response = postRequest.setRequestDetails(this.uri, "/maps/api/place/add/json", queryParams,
+				new HashMap<>(), headers_map_dummy, new HashMap<>(), new HashMap<>(), addPlaceAPI_requestBody);
 
 		Map<String, Object> expectedValuesMap = new HashMap<>();
 		expectedValuesMap.put("status", "OK");
 		expectedValuesMap.put("scope", "APP");
-
 		AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void reqResPostAPITest() {
+
+		Map emptyMap = new HashMap();
+		String requestBody = "{\n" + "    \"name\": \"morpheus\",\n" + "    \"job\": \"leader\"\n" + "}";
+		Headers headers = new Headers();
+		Map<String, Object> headers_map = headers.addPlaceApi("application/json");
+
+		PostRequest postRequest = new PostRequest();
+		postRequest.setRequestDetails("https://reqres.in/", "/api/users", emptyMap, emptyMap, headers_map, emptyMap,
+				emptyMap, requestBody);
 	}
 }
