@@ -73,6 +73,13 @@ public class ExtentReportManager {
 		Listeners.threadLocal.get().warning(MarkupHelper.createLabel(log, ExtentColor.YELLOW));
 	}
 
+	public static void logSkipDetails(String log) {
+		if (Listeners.threadLocal == null) {
+			return;
+		}
+		Listeners.threadLocal.get().skip(log);
+	}
+
 	/**
 	 * @param json as <String>
 	 */

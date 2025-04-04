@@ -19,7 +19,7 @@ import utilities.requests.PostRequest;
 
 public class DummyApiTest extends BaseTest {
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void addPlaceApiTest() {
 
 		RestAssured.baseURI = this.uri;
@@ -50,7 +50,7 @@ public class DummyApiTest extends BaseTest {
 //				headers_map_dummy, addPlaceAPI_requestBody);
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true, dependsOnMethods = { "addPlaceApiTest_withFramework" })
 	public void addPlaceApiTest_withFramework2() {
 
 		File addPlaceAPI_requestBody = new File(
