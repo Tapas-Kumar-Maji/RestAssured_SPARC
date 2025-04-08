@@ -50,6 +50,12 @@
     <version>5.1.2</version>
 	</dependency>
 	
+	<dependency>
+    <groupId>com.slack.api</groupId>
+    <artifactId>slack-api-client</artifactId>
+    <version>1.45.3</version>
+	</dependency>
+	
 	<!-- <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
