@@ -11,11 +11,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
 
 public class BaseTest {
+
 	public String uri = null;
 	public String version = null;
 	public String username = null;
 	private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
+	/**
+	 * Reads System properties and reads from Config.properties file.
+	 * 
+	 */
 	@BeforeSuite(alwaysRun = true)
 	public void setProperties() {
 		String env = System.getProperty("env", "").trim();

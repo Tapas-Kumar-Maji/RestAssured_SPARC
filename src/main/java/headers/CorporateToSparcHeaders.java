@@ -10,7 +10,7 @@ import java.util.Map;
 public enum CorporateToSparcHeaders {
 
 	Client_ID("Client ID", "default_value"), Client_Secret("Client Secret", "default_value"),
-	Content_Type("Content-Type", "default_value");
+	Content_Type("Content-Type", "application/json");
 
 	private final String key;
 	private final Object value;
