@@ -48,10 +48,10 @@ public class GoogleMapsAPIsTest extends BaseTest {
 
 	// assertions.
 	Map<String, Object> expectedValuesMap = new HashMap<>();
-	expectedValuesMap.put("status", "OK");
+	expectedValuesMap.put("status", "OK tapas");
 	expectedValuesMap.put("scope", "APP");
 //	expectedValuesMap.put("Server", "Apache/2.4.52 (Ubuntu)");
-	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap);
+	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap, "addPlaceApi");
 
 	response.then().assertThat().header("Server", "Apache/2.4.52 (Ubuntu)");
     }
@@ -77,7 +77,7 @@ public class GoogleMapsAPIsTest extends BaseTest {
 	Request updateRequest = new Request();
 	updateRequest.setRequestDetails(Method.PUT, this.baseURI, endpoint, queryParams, pathParamsDummy, headers,
 		cookiesDummy, multiPartParamsDummy, requestBody);
-    }
+    }	
 
     // GET Api Test.
     @Test(dependsOnMethods = { "updatePlaceApi" })
@@ -96,8 +96,8 @@ public class GoogleMapsAPIsTest extends BaseTest {
 	// assertions.
 	Map<String, Object> expectedValuesMap = new HashMap<>();
 	expectedValuesMap.put("address", this.updatedAddress);
-	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap);
-    }
+	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap, "getPlaceApiTest");
+}
 
     // DELETE Api Test.
     @Test(dependsOnMethods = { "getPlaceApiTest" })
@@ -116,8 +116,8 @@ public class GoogleMapsAPIsTest extends BaseTest {
 
 	// assertions.
 	Map<String, Object> expectedValuesMap = new HashMap<>();
-	expectedValuesMap.put("status", "OK");
-	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap);
+	expectedValuesMap.put("status", "not OK");
+	AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap, "deletePlaceApiTest");
 
 	response.then().assertThat().body("status", Matchers.equalTo("OK"));
     }

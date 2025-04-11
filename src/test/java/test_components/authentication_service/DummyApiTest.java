@@ -88,7 +88,7 @@ public class DummyApiTest extends BaseTest {
 		Map<String, Object> expectedValuesMap = new HashMap<>();
 		expectedValuesMap.put("status", "OK");
 		expectedValuesMap.put("scope", "APP");
-		AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap);
+		AssertionUtils.assertExpectedValuesWithJsonPath(response, expectedValuesMap, "addPlaceApiTest_withAssertions");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
