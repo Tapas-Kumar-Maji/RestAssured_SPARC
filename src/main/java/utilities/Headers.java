@@ -1,6 +1,5 @@
 package utilities;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import headers.CorporateToSparcHeaders;
@@ -12,27 +11,55 @@ import headers.CorporateToSparcHeaders;
 public class Headers {
 
 	/**
-	 * For Dummy API testing
+	 * For dummy AddPlaceApi testing.
 	 * 
 	 * @param contentType
-	 * @return map of headers
+	 * @return
 	 */
 	public Map<String, Object> addPlaceApi(String contentType) {
+
 		Map<String, Object> headers_map = CorporateToSparcHeaders.getHeaders();
 		headers_map.clear();
 		headers_map.put(CorporateToSparcHeaders.Content_Type.getKey(), contentType);
 		return headers_map;
 	}
 
-	public Map<String, Object> corporateToSparc(String contentType) {
+	/**
+	 * For dummy UpdatePlaceApi testing.
+	 * 
+	 * @param contentType
+	 * @return
+	 */
+	public Map<String, Object> updatePlaceApi(String contentType) {
+
 		Map<String, Object> headers_map = CorporateToSparcHeaders.getHeaders();
+		headers_map.clear();
 		headers_map.put(CorporateToSparcHeaders.Content_Type.getKey(), contentType);
 		return headers_map;
 	}
 
-	public Map<String, Object> submitDCApplication(String contentType) {
-		Map<String, Object> headers = new HashMap<String, Object>();
-//		headers.put("Content-Type", contentType);
-		return headers;
+	/**
+	 * CreateSparcAuth API header.
+	 * 
+	 * @param client_ID
+	 * @param client_Secret
+	 * @param contentType
+	 * @return
+	 */
+	public Map<String, Object> createSparcAuth(String client_ID, String client_Secret, String contentType) {
+
+		Map<String, Object> headers_map = CorporateToSparcHeaders.getHeaders();
+		if (client_ID != null) {
+			headers_map.put(CorporateToSparcHeaders.Client_ID.getKey(), client_ID);
+		}
+		if (client_Secret != null) {
+			headers_map.put(CorporateToSparcHeaders.Client_Secret.getKey(), client_Secret);
+		}
+		if (contentType != null) {
+			headers_map.put(CorporateToSparcHeaders.Content_Type.getKey(), contentType);
 	}
+
+		return headers_map;
+	}
+
 }

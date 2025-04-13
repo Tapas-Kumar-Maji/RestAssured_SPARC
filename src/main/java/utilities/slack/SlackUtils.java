@@ -22,7 +22,7 @@ public class SlackUtils {
 		Payload payload = Payload.builder().text(message).build();
 		try {
 			WebhookResponse response = slack.send(WEBHOOK_URL, payload);
-			System.out.println("Slack response : " + response.getMessage());
+			System.out.println("Slack response : " + response.getBody());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
