@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -15,6 +17,8 @@ import com.aventstack.extentreports.ExtentTest;
 import utilities.slack.SlackUtils;
 
 public class Listeners implements ITestListener {
+
+	private static final Logger logger = LogManager.getLogger(Listeners.class);
 
 	public static ExtentReports extentReports = null;
 	public static ThreadLocal<ExtentTest> threadLocal = null;
@@ -64,14 +68,80 @@ public class Listeners implements ITestListener {
 	public void onTestSuccess(ITestResult result) {
 		passedCount++;
 		allTests.add(" *" + result.getMethod().getMethodName() + "* - PASSED");
+
+		logger.info("Test PASSED: {}", result.getMethod().getMethodName());
 	}
 	
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		skippedCount++;
 		allTests.add(" *" + result.getMethod().getMethodName() + "* - SKIPPED");
+		
+		// Log to Extent Report
+		Throwable throwable = result.getThrowable();
+		if (throwable != null) {
+			StringBuilder skipDetails = new StringBuilder();
 
-		ExtentReportManager.logSkipDetails("Test Skipped: " + result.getThrowable().getMessage());
+			skipDetails.append("<b>Test Skipped:</b> ")
+					.append(result.getMethod().getMethodName())
+					.append("<br><b>Skip Reason:</b> ")
+					.append(throwable.getMessage())
+					.append("<br>");
+
+			if (throwable.getCause() != null) {
+				skipDetails.append("<b>Cause:</b> ")
+						.append(throwable.getCause().toString())
+						.append("<br>");
+			}
+
+			skipDetails.append("<b>Exception Class:</b> ")
+					.append(throwable.getClass().getCanonicalName())
+					.append("<br>");
+
+			// Stack trace formatting
+			String stackTraceFormatted = Arrays.stream(throwable.getStackTrace())
+					.map(StackTraceElement::toString)
+					.collect(Collectors.joining("<br>"));
+
+			if (stackTraceFormatted.length() > 8000) {
+				stackTraceFormatted = stackTraceFormatted.substring(0, 8000) + "<br>...(truncated)";
+			}
+			skipDetails.append("<details>\n" + "  <summary>Click to see stack trace</summary>\n")
+					.append("<b>Stack Trace:</b><br><pre>").append(stackTraceFormatted).append("</pre>")
+					.append("\n" + "</details>\n");
+
+			ExtentReportManager.logSkipDetails(skipDetails.toString());
+		}
+
+		
+		// Slack: Log throwable
+		StringBuilder skipDetails = new StringBuilder();
+		skipDetails.append("*Test Skipped:* `").append(result.getMethod().getMethodName()).append("`\n")
+				.append("> *Skip Reason:* ```").append(result.getThrowable().getMessage()).append("```\n");
+
+		if (result.getThrowable().getCause() != null) {
+			skipDetails.append("> *Skip Cause:* ```").append(result.getThrowable().getCause().toString())
+					.append("```\n");
+		}
+
+		skipDetails.append("> *Exception Class:* `").append(result.getThrowable().getClass().getCanonicalName())
+				.append("`\n");
+
+		// Stack trace (shortened)
+		String stackTraceForSlack = Arrays.stream(result.getThrowable().getStackTrace())
+				.map(StackTraceElement::toString).collect(Collectors.joining("\n"));
+		if (stackTraceForSlack.length() > 3000) {
+			stackTraceForSlack = stackTraceForSlack.substring(0, 3000) + "\n...(truncated)";
+		}
+		skipDetails.append("> *Stack Trace:*\n```").append(stackTraceForSlack).append("```");
+
+		// Send to Slack
+		SlackUtils.sendMessage(skipDetails.toString());
+
+		// Log to .log file
+		logToFile(result, "SKIPPED");
+		logger.warn("Test SKIPPED: {}", result.getMethod().getMethodName());
+
 	}
 
 	@Override
@@ -88,7 +158,8 @@ public class Listeners implements ITestListener {
             errorDetails.append("> *Error Cause:* ```").append(result.getThrowable().getCause().toString()).append("```\n");
         }
 
-        errorDetails.append("> *Error Class:* `").append(result.getThrowable().getClass().getCanonicalName()).append("`\n");
+		errorDetails.append("> *Error Class:* `").append(result.getThrowable().getClass().getCanonicalName())
+				.append("`\n");
 
 		// Formatting and truncating Stack Trace for Slack
 		String stackTraceForSlack = Arrays.stream(result.getThrowable().getStackTrace())
@@ -102,18 +173,68 @@ public class Listeners implements ITestListener {
         // Send formatted error details to Slack
         SlackUtils.sendMessage(errorDetails.toString());
 
-		ExtentReportManager.logFailureDetails("Error Message : " + result.getThrowable().getMessage());
-		if (result.getThrowable().getCause() != null) {
-			ExtentReportManager.logFailureDetails("Error cause : " + result.getThrowable().getCause().toString());
+
+		// Log to Extent Report
+		Throwable throwable = result.getThrowable();
+		StringBuilder failureDetails = new StringBuilder();
+
+		failureDetails.append("<b>Test Failed:</b> ").append(result.getMethod().getMethodName())
+				.append("<br><b>Error Message:</b> ").append(throwable.getMessage()).append("<br>");
+
+		if (throwable.getCause() != null) {
+			failureDetails.append("<b>Cause:</b> ").append(throwable.getCause().toString()).append("<br>");
 		}
 
-		ExtentReportManager
-				.logFailureDetails("Error classname : " + result.getThrowable().getClass().getCanonicalName());
-		String stackTrace = Arrays.toString(result.getThrowable().getStackTrace());
-		stackTrace = stackTrace.replace(",", "<br>");
-		String formattedStackTrace = "<details>\n" + "  <summary>Click to see stack trace</summary>\n" + stackTrace
-				+ "\n" + "</details>\n";
-		ExtentReportManager.logExceptionDetails(formattedStackTrace);
+		failureDetails.append("<b>Exception Class:</b> ").append(throwable.getClass().getCanonicalName())
+				.append("<br>");
+
+		// Stack trace formatting
+		String stackTraceFormatted = Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString)
+				.collect(Collectors.joining("<br>"));
+
+		if (stackTraceFormatted.length() > 8000) {
+			stackTraceFormatted = stackTraceFormatted.substring(0, 8000) + "<br>...(truncated)";
+		}
+
+		failureDetails.append("<details>\n").append("<summary><b>Click to view stack trace</b></summary>\n")
+				.append("<pre>").append(stackTraceFormatted).append("</pre>\n</details>");
+
+		ExtentReportManager.logFailure(failureDetails.toString());
+
+		// Log to .log file
+		logToFile(result, "FAILED");
+		logger.error("Test FAILED: {}", result.getMethod().getMethodName());
+
+	}
+
+	private void logToFile(ITestResult result, String status) {
+		Throwable throwable = result.getThrowable();
+		if (throwable == null) {
+			return;
+		}
+
+		StringBuilder logBuilder = new StringBuilder();
+		logBuilder.append("\n==================== ").append(status).append(" ====================\n");
+		logBuilder.append("Test Name      : ").append(result.getMethod().getMethodName()).append("\n");
+		logBuilder.append("Error Message  : ").append(throwable.getMessage()).append("\n");
+
+		if (throwable.getCause() != null) {
+			logBuilder.append("Cause          : ").append(throwable.getCause().toString()).append("\n");
+		}
+
+		logBuilder.append("Exception Class: ").append(throwable.getClass().getCanonicalName()).append("\n");
+		logBuilder.append("Stack Trace    :\n");
+
+		String stackTrace = Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString)
+				.collect(Collectors.joining("\n"));
+
+		if (stackTrace.length() > 10000) {
+			stackTrace = stackTrace.substring(0, 10000) + "\n...(truncated)";
+		}
+
+		logBuilder.append(stackTrace).append("\n");
+
+		logger.error(logBuilder.toString());
 	}
 
 }
