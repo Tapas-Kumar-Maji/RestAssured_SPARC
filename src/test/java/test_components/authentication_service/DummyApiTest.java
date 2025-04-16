@@ -14,7 +14,6 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import test_components.BaseTest;
 import utilities.Headers;
-import utilities.logging.ApiLogger;
 import utilities.reporting.AssertionUtils;
 import utilities.requests.Request;
 
@@ -26,7 +25,7 @@ public class DummyApiTest extends BaseTest {
 	public void addPlaceApiTest() {
 
 		RestAssured.baseURI = this.uri;
-		RestAssured.filters(new ApiLogger());
+//		RestAssured.filters(new ApiLogger());
 		File addPlaceAPI_requestBody = new File(
 				System.getProperty("user.dir") + "/src/test/resources/DummyApi/AddPlaceAPI_RequestBody.json");
 		Headers headers = new Headers();

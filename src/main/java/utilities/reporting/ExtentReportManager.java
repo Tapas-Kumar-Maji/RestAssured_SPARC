@@ -55,6 +55,13 @@ public class ExtentReportManager {
 		Listeners.threadLocal.get().fail(MarkupHelper.createLabel(log, ExtentColor.RED));
 	}
 
+	public static void logFailure(String log) {
+		if (Listeners.threadLocal == null) {
+			return;
+		}
+		Listeners.threadLocal.get().fail(log);
+	}
+
 	public static void logExceptionDetails(String log) {
 		Listeners.threadLocal.get().fail(log);
 	}
