@@ -1,10 +1,12 @@
 package utilities.slack;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.slack.api.Slack;
+import com.slack.api.SlackConfig;
+import com.slack.api.util.http.listener.HttpResponseListener;
 import com.slack.api.webhook.Payload;
-import com.slack.api.webhook.WebhookResponse;
 
 public class SlackUtils {
 
@@ -18,11 +20,15 @@ public class SlackUtils {
 	 */
 	public static void sendMessage(String message) {
 
-		Slack slack = Slack.getInstance();
+		SlackConfig config = new SlackConfig(); // disables slack response logging to console
+		config.setHttpClientResponseHandlers(new ArrayList<HttpResponseListener>());
+
+		Slack slack = Slack.getInstance(config);
 		Payload payload = Payload.builder().text(message).build();
 		try {
-			WebhookResponse response = slack.send(WEBHOOK_URL, payload);
-			System.out.println("Slack response : " + response.getBody());
+			slack.send(WEBHOOK_URL, payload);
+//			WebhookResponse response = slack.send(WEBHOOK_URL, payload);
+//			System.out.println("Slack response : " + response.getBody());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
