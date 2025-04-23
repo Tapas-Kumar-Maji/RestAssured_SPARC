@@ -5,10 +5,9 @@
   	<listener class-name="utilities.reporting.Listeners"></listener>
   </listeners>
   
-  <test thread-count="5" name="Test">
+  <test thread-count="5" parallel="none" name="DummyApiTest">
     <classes>
       <class name="test_components.authentication_service.DummyApiTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
-    

@@ -12,6 +12,14 @@ public class SlackUtils {
 
 	// This webhook url is for sparc-api-testing channel.
 	public static final String WEBHOOK_URL = "https://hooks.slack.com/services/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";
+	public static final SlackConfig config;
+	public static final Slack slack;
+
+	static {
+		config = new SlackConfig(); // disables slack response logging to console
+		config.setHttpClientResponseHandlers(new ArrayList<HttpResponseListener>());
+		slack = Slack.getInstance(config);
+	}
 
 	/**
 	 * Sends the message to Slack webhook url.
@@ -20,15 +28,9 @@ public class SlackUtils {
 	 */
 	public static void sendMessage(String message) {
 
-		SlackConfig config = new SlackConfig(); // disables slack response logging to console
-		config.setHttpClientResponseHandlers(new ArrayList<HttpResponseListener>());
-
-		Slack slack = Slack.getInstance(config);
 		Payload payload = Payload.builder().text(message).build();
 		try {
 			slack.send(WEBHOOK_URL, payload);
-//			WebhookResponse response = slack.send(WEBHOOK_URL, payload);
-//			System.out.println("Slack response : " + response.getBody());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

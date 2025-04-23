@@ -164,7 +164,7 @@
       </plugins>
     </pluginManagement>
     
-   <plugins>
+   	<plugins>
       <plugin>
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
@@ -175,6 +175,19 @@
           <reportDirectory>${project.basedir}/allure-report</reportDirectory>
         </configuration>
       </plugin> 
+      
+      <plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-surefire-plugin</artifactId>
+	  <configuration>
+	    <suiteXmlFiles>
+	      <suiteXmlFile>test-suites/DummyApiTestng.xml</suiteXmlFile>
+	    </suiteXmlFiles>
+	    <parallel>${surefire.parallel}</parallel>
+	    <threadCount>${surefire.threadCount}</threadCount>
+	  </configuration>
+	  </plugin>
+
       
       <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
