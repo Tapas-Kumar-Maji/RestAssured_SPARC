@@ -4,14 +4,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
+
+import utilities.reporting.Listeners;
 
 public class BaseTest {
 
 	public String uri = null;
 	public String version = null;
 	public String username = null;
-//	private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
 	/**
 	 * Reads System properties and reads from Config.properties file.
@@ -26,11 +28,11 @@ public class BaseTest {
 			env = "qa";
 		}
 
-		if (env.toLowerCase() == "qa") {
+		if ("qa".equalsIgnoreCase(env)) {
 			this.uri = properties.getProperty("uri.qa");
-		} else if (env.toLowerCase() == "sandbox") {
+		} else if (env.equalsIgnoreCase("sandbox")) {
 			this.uri = properties.getProperty("uri.sandbox");
-		} else if (env.toLowerCase() == "production") {
+		} else if (env.equalsIgnoreCase("production")) {
 			this.uri = properties.getProperty("uri.production");
 		}
 
@@ -41,17 +43,10 @@ public class BaseTest {
 		this.username = properties.getProperty("username");
 	}
 
-	/**
-	 * Logs stack trace into .log file.
-	 * 
-	 * @param result
-	 */
-//	@AfterMethod(alwaysRun = true)
-//	public void logStackTrace(ITestResult result) {
-//		if (result.getStatus() == ITestResult.FAILURE) {
-//			logger.error("Error : \n", result.getThrowable());
-//		}
-//	}
+	@AfterMethod(alwaysRun = true)
+	public void tearDown() {
+		Listeners.threadLocal.remove(); // Clear ThreadLocal after each test for thread-saftey
+	}
 
 	/**
 	 * Reading config.properties file

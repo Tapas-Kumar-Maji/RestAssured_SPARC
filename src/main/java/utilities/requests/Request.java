@@ -23,7 +23,7 @@ import utilities.reporting.ExtentReportManager;
 
 public class Request {
 
-    private static RequestSpecification requestSpecification = null;
+//    private static RequestSpecification requestSpecification = null;
 
     /**
      * Set the request details. (Consumes the body as a String)
@@ -43,7 +43,7 @@ public class Request {
 	    Map<String, Object> pathParams, Map<String, Object> headers, Map<String, String> cookies,
 	    Map<String, Object> multiPartParams, String body) {
 
-	requestSpecification = getRequestSpecification(baseURI, queryParam, pathParams, headers, cookies,
+    RequestSpecification requestSpecification = getRequestSpecification(baseURI, queryParam, pathParams, headers, cookies,
 		multiPartParams, body);
 	Response response = null;
 
@@ -87,7 +87,7 @@ public class Request {
 	    Map<String, Object> pathParams, Map<String, Object> headers, Map<String, String> cookies,
 	    Map<String, Object> multiPartParams, File body) {
 
-	requestSpecification = getRequestSpecification(baseURI, queryParam, pathParams, headers, cookies,
+    RequestSpecification requestSpecification = getRequestSpecification(baseURI, queryParam, pathParams, headers, cookies,
 		multiPartParams, body);
 	Response response = null;
 
