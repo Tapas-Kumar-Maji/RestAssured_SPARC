@@ -62,10 +62,6 @@ public class ExtentReportManager {
 		Listeners.threadLocal.get().fail(log);
 	}
 
-//	public static void logExceptionDetails(String log) {
-//		Listeners.threadLocal.get().fail(log);
-//	}
-
 	public static void logInfoDetails(String log) {
 		if (Listeners.threadLocal == null) {
 			return;
@@ -73,25 +69,11 @@ public class ExtentReportManager {
 		Listeners.threadLocal.get().info(log);
 	}
 
-//	public static void logWarningDetails(String log) {
-//		if (Listeners.threadLocal == null) {
-//			return;
-//		}
-//		Listeners.threadLocal.get().warning(MarkupHelper.createLabel(log, ExtentColor.YELLOW));
-//	}
-
 	public static void logSkipDetails(String log) {
 		if (Listeners.threadLocal == null) {
 			return;
 		}
 		Listeners.threadLocal.get().skip(log);
-	}
-
-	public static void logRetryDetails(String log) {
-		if (Listeners.threadLocal == null) {
-			return;
-		}
-		Listeners.threadLocal.get().fail(MarkupHelper.createLabel(log, ExtentColor.ORANGE));
 	}
 
 	/**
@@ -129,6 +111,18 @@ public class ExtentReportManager {
 		String[][] arrayHeaders = headersList.stream()
 				.map(header -> new String[] { header.getName(), header.getValue() }).toArray(String[][]::new);
 		Listeners.threadLocal.get().info(MarkupHelper.createTable(arrayHeaders));
+	}
+
+	/**
+	 * For logging assertions in Extent Report.
+	 * 
+	 * @param assertions
+	 */
+	public static void logAssertions(String[][] assertions) {
+		if (Listeners.threadLocal == null || assertions == null) {
+			return;
+		}
+		Listeners.threadLocal.get().info(MarkupHelper.createTable(assertions));
 	}
 
 	/**
