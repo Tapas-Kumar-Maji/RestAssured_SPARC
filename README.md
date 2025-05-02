@@ -41,6 +41,8 @@ mvn clean test -Dsurefire.suiteXmlFiles=test-suites/DummyApiTestng.xml
 mvn clean test -Dsurefire.suiteXmlFiles=test-suites/GoogleMapsApiTesting.xml
 # Run Example Test
 mvn clean test -Dsurefire.suiteXmlFiles=test-suites/ExampleTest.xml
+# Run Dummy API tests
+mvn clean test -Dsurefire.parallel=none -Dsurefire.threadCount=5
 ```
 
 ### Generating Reports
@@ -56,6 +58,8 @@ mvn allure:serve
 
 - **TestNG**: Test framework
 - **RestAssured**: API testing
+- **ExtentReports**: HTML Report 
+- **Slack**: Slack framework 
 - **Mockito**: Mocking framework
 - **AssertJ**: Fluent assertions
 - **WireMock**: HTTP service mocking

@@ -15,6 +15,8 @@ import org.testng.ITestResult;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 
+import utilities.mail.EmailFormatter;
+import utilities.mail.EmailSender;
 import utilities.slack.SlackUtils;
 
 public class Listeners implements ITestListener {
@@ -42,6 +44,8 @@ public class Listeners implements ITestListener {
 
 	@Override
 	public void onFinish(ITestContext context) {
+		String fallbackText = "";
+
 		if (extentReports != null) {
 			extentReports.flush();
 		}
@@ -61,18 +65,26 @@ public class Listeners implements ITestListener {
 				+ " *Retry:* " + retryCount;
 		SlackUtils.sendMessage(summary);
 		logger.info(summary);
+		fallbackText += "\n\n" + summary;
+
+		EmailFormatter emailFormatter = new EmailFormatter();
+		String htmlText = emailFormatter.formatEmail(totalTestRun, passedCount, failedCount, skippedCount, retryCount);
 			
 		// Slack: All Test Results
 		if (!allTests.isEmpty()) {
 			String allResultsMessage = "*All Test Results:*\n" + String.join("\n", allTests);
 			SlackUtils.sendMessage(allResultsMessage);
 			logger.info(allResultsMessage);
+			fallbackText += "\n\n" + allResultsMessage;
+			htmlText += "\n\n" + "\n" + "<h3> All Test Results:</h3>\n" + "\n"
+					+ emailFormatter.convertToHtmlTableRows(allResultsMessage) + "</tbody></table>";
 		}
 
 		// Slack: Logging Retry Summary
 		if (!RetryAnalyzer.retryMap.isEmpty()) {
 
 			StringBuilder retrySummary = new StringBuilder();
+			StringBuilder htmlRows = new StringBuilder();
 			retrySummary.append(":repeat:	* Retry Summary:*\n");
 			
 			for (Map.Entry<String, Integer> entry : RetryAnalyzer.retryMap.entrySet()) {
@@ -80,20 +92,39 @@ public class Listeners implements ITestListener {
 	            String testName = entry.getKey();
 				int attempts = entry.getValue() + 1;
 				retrySummary.append("  *").append(testName).append("* | ").append("Total Attempts : ").append(attempts);
+				htmlRows.append("<tr><td>").append(testName).append("</td><td>").append("Total Attempts : ")
+						.append(attempts).append("</td></td>");
 
 				boolean eventuallyPassed = context.getPassedTests().getAllResults().stream()
 						.anyMatch(result -> result.getName().equals(testName));
 				if (eventuallyPassed) {
 					retrySummary.append(" | Final Status: PASSED_AFTER_RETRY  :white_check_mark:");
+					htmlRows.append(" Final Status: PASSED_AFTER_RETRY ").append("</td></tr>\n");
 				} 
 				else {
 					retrySummary.append(" | Final Status: FAILED  :x:");
+					htmlRows.append(" Final Status: FAILED ").append("</td></tr>\n");
 				}
 				retrySummary.append("\n");
 			}
+
 			SlackUtils.sendMessage(retrySummary.toString());
 			logger.info(retrySummary.toString());
+			fallbackText += "\n\n" + retrySummary.toString();
+			htmlText += "\n\n" + "\n" + "<h3> Retry Summary:</h3>\n" + "\n" + htmlRows.toString() + "</tbody></table>";
+
 		}
+		
+		htmlText +=
+		"\n\n"
+		+ "<div class=\"footer\">\n"
+		+ "    <p>Sent automatically by SPARC API Test Framework</p>\n"
+		+ "</div>\n"
+		+ "\n";
+
+		// Define email details
+		String[] toEmails = { "tapaskumar.maji@xalts.io" }; // add more emails
+		EmailSender.sendEmailWithReport(toEmails, htmlText, fallbackText);
 	}
 
 	@Override

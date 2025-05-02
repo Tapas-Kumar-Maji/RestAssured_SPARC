@@ -62,6 +62,12 @@
     <artifactId>lombok</artifactId>
     <version>1.18.36</version> 
 	</dependency>
+	
+	<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-email</artifactId>
+    <version>1.6.0</version>
+	</dependency>
 
 	<!-- Additional Test Dependencies -->
 	<dependency>
