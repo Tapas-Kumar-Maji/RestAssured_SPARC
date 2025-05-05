@@ -1,0 +1,19 @@
+image: maven:3.8.6-openjdk-17
+
+pipelines:
+  custom:
+    run-tests:
+      - variables:
+          - name: SUITE_FILE
+            default: ""  # Leave empty to run all tests
+      - step:
+          name: Run Tests
+          caches:
+            - maven
+          script:
+            - |
+              if [ "$SUITE_FILE" = "" ]; then
+                mvn clean test
+              else
+                mvn clean test -Dsurefire.suiteXmlFiles=$SUITE_FILE
+              fi
