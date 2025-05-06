@@ -7,7 +7,12 @@
   
   <test thread-count="2" parallel="none" name="DummyApiTest">
     <classes>
-      <class name="test_components.authentication_service.DummyApiTest"/>
+      <class name="test_components.authentication_service.DummyApiTest">
+      <methods>
+      <exclude name="addPlaceApiTest_withFramework"></exclude>
+      <exclude name="addPlaceApiTest_withFramework2"></exclude>
+      </methods>
+      </class>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

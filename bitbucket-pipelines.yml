@@ -17,3 +17,11 @@ pipelines:
               else
                 mvn clean test -Dsurefire.suiteXmlFiles=$SUITE_FILE
               fi
+
+    run-parallel-none:
+      - step:
+          name: Run with Parallel None
+          caches:
+            - maven
+          script:
+            - mvn clean test -Dsurefire.parallel=none -Dsurefire.threadCount=5
