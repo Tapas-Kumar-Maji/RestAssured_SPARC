@@ -18,10 +18,36 @@ pipelines:
                 mvn clean test -Dsurefire.suiteXmlFiles=$SUITE_FILE
               fi
 
-    run-parallel-none:
+    run-parallel-parallel:
+      - variables:
+          - name: PARALLEL
+            default: "none"
+          - name: THREAD_COUNT
+            default: "5"
       - step:
-          name: Run with Parallel None
+          name: Run Tests with Custom Parallel Settings
           caches:
             - maven
           script:
-            - mvn clean test -Dsurefire.parallel=none -Dsurefire.threadCount=5
+            - mvn clean test -Dsurefire.parallel=$PARALLEL -Dsurefire.threadCount=$THREAD_COUNT
+
+	run-flexible-tests:
+	  - variables:
+	      - name: SUITE_FILE
+	        default: "test-suites/DummyApiTestng.xml"
+	      - name: PARALLEL
+	        default: "none"       # e.g., methods, classes
+	      - name: THREAD_COUNT
+	        default: "5"
+	  - step:
+	      name: Run Flexible Tests
+	      caches:
+	        - maven
+	      script:
+	        - |
+	          CMD="mvn clean test -Dsurefire.parallel=$PARALLEL -Dsurefire.threadCount=$THREAD_COUNT"
+	          if [ "$SUITE_FILE" != "" ]; then
+	            CMD="$CMD -Dsurefire.suiteXmlFiles=$SUITE_FILE"
+	          fi
+	          echo "Executing: $CMD"
+	          eval $CMD
