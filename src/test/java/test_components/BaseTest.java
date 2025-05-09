@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
 
+import utilities.logging.ApiLogger;
 import utilities.reporting.Listeners;
 
 public class BaseTest {
@@ -46,6 +47,8 @@ public class BaseTest {
 	@AfterMethod(alwaysRun = true)
 	public void tearDown() {
 		Listeners.threadLocal.remove(); // Clear ThreadLocal after each test for thread-saftey
+		Listeners.logger.remove();
+		ApiLogger.logger.remove();
 	}
 
 	/**

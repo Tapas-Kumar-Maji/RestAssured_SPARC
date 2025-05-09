@@ -21,7 +21,11 @@ import utilities.slack.SlackUtils;
 
 public class Listeners implements ITestListener {
 
-	private static final Logger logger = LogManager.getLogger(Listeners.class);
+//	private static final Logger logger = LogManager.getLogger(Listeners.class);
+	public static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> {
+		String threadName = Thread.currentThread().getName();
+		return LogManager.getLogger(threadName);
+	});
 
 	public static ExtentReports extentReports = null;
 	public static ThreadLocal<ExtentTest> threadLocal = null;
@@ -64,7 +68,7 @@ public class Listeners implements ITestListener {
 				+ " *Skipped:* "+ skippedCount + "\n" 
 				+ " *Retry:* " + retryCount;
 		SlackUtils.sendMessage(summary);
-		logger.info(summary);
+		logger.get().info(summary);
 		fallbackText += "\n\n" + summary;
 
 		EmailFormatter emailFormatter = new EmailFormatter();
@@ -74,7 +78,7 @@ public class Listeners implements ITestListener {
 		if (!allTests.isEmpty()) {
 			String allResultsMessage = "*All Test Results:*\n" + String.join("\n", allTests);
 			SlackUtils.sendMessage(allResultsMessage);
-			logger.info(allResultsMessage);
+			logger.get().info(allResultsMessage);
 			fallbackText += "\n\n" + allResultsMessage;
 			htmlText += "\n\n" + "\n" + "<h3> All Test Results:</h3>\n" + "\n"
 					+ emailFormatter.convertToHtmlTableRows(allResultsMessage) + "</tbody></table>";
@@ -109,7 +113,7 @@ public class Listeners implements ITestListener {
 			}
 
 			SlackUtils.sendMessage(retrySummary.toString());
-			logger.info(retrySummary.toString());
+			logger.get().info(retrySummary.toString());
 			fallbackText += "\n\n" + retrySummary.toString();
 			htmlText += "\n\n" + "\n" + "<h3> Retry Summary:</h3>\n" + "\n" + htmlRows.toString() + "</tbody></table>";
 
@@ -143,7 +147,7 @@ public class Listeners implements ITestListener {
 		Integer retryCount = RetryAnalyzer.retryMap.get(testName);
 		if (retryCount != null && retryCount > 0) {
 			String msg = "\n\nRetrying test: " + testName + " | Attempt: " + (retryCount + 1) + "\n";
-			logger.info(msg); // .log file and console
+			logger.get().info(msg); // .log file and console
 			SlackUtils.sendMessage(":repeat: Retrying test * : " + testName + "* | Attempt: " + (retryCount + 1)); // slack
 			ExtentReportManager.logInfoDetails(msg); // extent report
 		}
@@ -155,7 +159,7 @@ public class Listeners implements ITestListener {
 		passedCount++;
 		allTests.add(" *" + result.getMethod().getMethodName() + "* - PASSED  :white_check_mark:");
 
-		logger.info("Test PASSED: {}", result.getMethod().getMethodName());
+		logger.get().info("Test PASSED: {}", result.getMethod().getMethodName());
 	}
 	
 	@Override
@@ -257,11 +261,11 @@ public class Listeners implements ITestListener {
 		// Log to .log file
 		if (RetryAnalyzer.retryMap.containsKey(testName)) {
 			logToFile(result, "FAILED");
-			logger.error("Test FAILED: {}", result.getMethod().getMethodName());
+			logger.get().error("Test FAILED: {}", result.getMethod().getMethodName());
 
 		} else {
 			logToFile(result, "SKIPPED");
-			logger.warn("Test SKIPPED: {}", result.getMethod().getMethodName());
+			logger.get().warn("Test SKIPPED: {}", result.getMethod().getMethodName());
 		}
 	}
 
@@ -325,7 +329,7 @@ public class Listeners implements ITestListener {
 
 		// Log to .log file
 		logToFile(result, "FAILED");
-		logger.error("Test FAILED: {}", result.getMethod().getMethodName());
+		logger.get().error("Test FAILED: {}", result.getMethod().getMethodName());
 
 	}
 
@@ -356,7 +360,7 @@ public class Listeners implements ITestListener {
 
 		logBuilder.append(stackTrace).append("\n");
 
-		logger.error(logBuilder.toString());
+		logger.get().error(logBuilder.toString());
 	}
 
 }
