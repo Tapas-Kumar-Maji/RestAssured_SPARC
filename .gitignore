@@ -64,3 +64,24 @@ Thumbs.db
 .allure
 allure-results/
 allure-report/
+
+# Ignore logs
+logs/
+*.log
+*.log.gz
+
+# Ignore reports
+reports/
+
+# Ignore compiled class files and build output
+target/
+
+# Ignore TestNG reports
+test-output/
+
+# Ignore IDE and system files (optional but good practice)
+*.iml
+.idea/
+*.class
+.DS_Store
+

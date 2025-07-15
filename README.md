@@ -51,6 +51,7 @@ mvn clean test -Dsurefire.parallel=none -Dsurefire.threadCount=5
 mvn allure:report
 
 # Serve Allure report locally
+# // Delete this comment
 mvn allure:serve
 ```
 

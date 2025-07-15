@@ -15,7 +15,7 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.restassured.http.Header;
 
 public class ExtentReportManager {
-
+	// Delete this comment
 	public static ExtentReports createExtentReport(String absoluteFilePath, String reportName, String documentTitle) {
 
 		ExtentSparkReporter extentSparkReporter = new ExtentSparkReporter(absoluteFilePath);

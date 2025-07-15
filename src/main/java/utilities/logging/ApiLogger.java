@@ -18,6 +18,7 @@ import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 import io.restassured.specification.ProxySpecification;
 
+//Delete this comment
 public class ApiLogger implements Filter {
 //	private static final Logger logger = LogManager.getLogger(ApiLogger.class);
 	public static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> {

@@ -1,7 +1,7 @@
 package utilities.mail;
 
 public class EmailFormatter {
-
+	// Delete this comment
 	/**
 	 * Formats the Test Summary Details at the top of the email.
 	 * 

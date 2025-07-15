@@ -1,7 +1,12 @@
 package utilities;
 
-import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+
+import org.hamcrest.Matchers;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 public class PracticeForInterview2 {
 
@@ -10,6 +15,7 @@ public class PracticeForInterview2 {
 		// default baseURI for all requests to be made.
 		RestAssured.baseURI = "https://rahulshettyacademy.com";
 		
+		Response getPlaceResponse =
 		given()
 		.baseUri("https://rahulshettyacademy.com")
 		.queryParam("key", "qaclick123")
@@ -32,10 +38,15 @@ public class PracticeForInterview2 {
 				+ "}")
 		.when()
 		.post("/maps/api/place/add/json")
+		
 		.then()
 		.log().all(true)
 		.assertThat()
-		.statusCode(200);
+		.statusCode(200)
+		.body("scope", equalTo("APP"))
+						.header("Server", Matchers.containsString("Apache/2.4.52"))
+
+						.extract().response();
 		
 		
 	}

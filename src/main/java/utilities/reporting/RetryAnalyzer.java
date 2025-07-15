@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
+//Delete this comment
 public class RetryAnalyzer implements IRetryAnalyzer {
 
 	private int retryCount = 0;

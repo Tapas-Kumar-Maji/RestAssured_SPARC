@@ -22,7 +22,7 @@ import utilities.logging.ApiLogger;
 import utilities.reporting.ExtentReportManager;
 
 public class Request {
-
+	// Delete this comment
 //    private static RequestSpecification requestSpecification = null;
 
     /**

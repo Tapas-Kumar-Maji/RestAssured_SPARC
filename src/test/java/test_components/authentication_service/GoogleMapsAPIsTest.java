@@ -19,7 +19,7 @@ import utilities.reporting.AssertionUtils;
 import utilities.requests.Request;
 
 public class GoogleMapsAPIsTest extends BaseTest {
-
+	// Delete this comment
     String place_id = null;
     String baseURI = "https://rahulshettyacademy.com";
     String updatedAddress = "Somyasundra Pally , Bangalore";

@@ -15,7 +15,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
 public class PracticeForInterview {
-	
+	// Delete this comment
 	static String placeId = null;
 
 	public static void main(String[] args) {

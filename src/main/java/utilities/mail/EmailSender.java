@@ -12,7 +12,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
 public class EmailSender {
-
+	// Delete this comment
 	private static final Pattern REPORT_PATTERN = Pattern
 			.compile("TestReport\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}\\.html");
 

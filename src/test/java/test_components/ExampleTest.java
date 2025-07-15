@@ -1,28 +1,42 @@
 package test_components;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.awaitility.Awaitility.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.jayway.jsonpath.JsonPath;
-import io.qameta.allure.*;
-import org.testng.annotations.*;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.CompletableFuture;
-import java.util.List; 
-import io.restassured.RestAssured;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
  
 @Epic("API Testing")
 @Feature("Example Tests")
 public class ExampleTest extends BaseTest {
-    
+	// Delete this comment
     private WireMockServer wireMockServer;
     
     @Mock
@@ -36,7 +50,8 @@ public class ExampleTest extends BaseTest {
         WireMock.configureFor("localhost", 8080);
     }
     
-    @AfterClass
+    @Override
+	@AfterClass
     public void tearDown() {
         wireMockServer.stop();
     }

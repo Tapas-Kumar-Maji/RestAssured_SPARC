@@ -20,7 +20,7 @@ import utilities.mail.EmailSender;
 import utilities.slack.SlackUtils;
 
 public class Listeners implements ITestListener {
-
+	// Delete this comment
 //	private static final Logger logger = LogManager.getLogger(Listeners.class);
 	public static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> {
 		String threadName = Thread.currentThread().getName();

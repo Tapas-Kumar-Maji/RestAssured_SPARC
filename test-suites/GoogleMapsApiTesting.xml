@@ -10,4 +10,4 @@
       <class name="test_components.authentication_service.GoogleMapsAPIsTest"/>
     </classes>
   </test> <!-- Test -->
-</suite> <!-- Suite -->
+</suite> 

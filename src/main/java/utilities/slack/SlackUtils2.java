@@ -27,7 +27,7 @@ import okhttp3.Response;
  * Using Slack API
  */
 public class SlackUtils2 {
-
+	// Delete this comment
 	private static final String BOT_TOKEN = "xoxb-..."; // Store securely in config.propertry
 	private static final String CHANNEL_ID = "C08LRMYRQGH";
 	private static String threadTs;

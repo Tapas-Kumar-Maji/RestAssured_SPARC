@@ -19,7 +19,7 @@ import utilities.reporting.AssertionUtils;
 import utilities.requests.Request;
 
 public class DummyApiTest extends BaseTest {
-
+	// Delete this comment
 	String place_id = null;
 
 	@Test(enabled = true)
