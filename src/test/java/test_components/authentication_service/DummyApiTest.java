@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
@@ -121,6 +122,11 @@ public class DummyApiTest extends BaseTest {
 		Request postRequest = new Request();
 		postRequest.setRequestDetails(Method.GET, baseURI, endpoint, queryParams, dummyMap, dummyMap, dummyMap,
 				dummyMap, "");
+	}
+
+	@DataProvider(name = "DataOfNames")
+	public String[][] getData() {
+		return new String[][] { { "Tapas", "firstname" }, { "Kumar", "middle" }, { "Maji", "last" } };
 	}
 
 }
