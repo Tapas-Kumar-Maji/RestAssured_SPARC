@@ -1,0 +1,25 @@
+image: maven:3.9.6-eclipse-temurin-21
+
+pipelines:
+  custom:
+    run-flexible-tests:
+      - variables:
+          - name: SUITE_FILE
+            default: "test-suites/DummyApiTestng.xml"
+          - name: PARALLEL
+            default: "none"
+          - name: THREAD_COUNT
+            default: "5"
+      - step:
+          name: Run Flexible Tests
+          caches:
+            - maven
+          script:
+            - |
+              CMD="mvn clean test -Dsurefire.parallel=$PARALLEL -Dsurefire.threadCount=$THREAD_COUNT"
+              if [ -n "$SUITE_FILE" ]; then
+                CMD="$CMD -Dsurefire.suiteXmlFiles=$SUITE_FILE"
+              fi
+              echo "Executing: $CMD"
+              eval "$CMD"
+#// Delete this comment

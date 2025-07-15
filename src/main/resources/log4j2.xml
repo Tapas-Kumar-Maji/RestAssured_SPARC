@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href=""?>
+<Configuration status="INFO">
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%msg%n%throwable{full}%n</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="FileAppender" 
+                     fileName="logs/api_regression.log"
+                     filePattern="logs/archive/api_regression-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout>
+                <Pattern>%msg%n%throwable{full}%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />  <!-- Overwrites the contents of the file-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>  <!-- Rolls over at end of the day -->
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>        
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
+<!-- // Delete this comment-->

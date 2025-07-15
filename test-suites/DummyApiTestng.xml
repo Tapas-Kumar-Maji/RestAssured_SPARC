@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <listeners>
+  	<listener class-name="utilities.reporting.Listeners"></listener>
+  </listeners>
+  
+  <test thread-count="2" parallel="none" name="DummyApiTest">
+    <classes>
+      <class name="test_components.authentication_service.DummyApiTest">
+      <methods>
+      <exclude name="addPlaceApiTest_withFramework"></exclude>
+      <exclude name="addPlaceApiTest_withFramework2"></exclude>
+      </methods>
+      </class>
+    </classes>
+  </test> <!-- Test -->
+</suite> 

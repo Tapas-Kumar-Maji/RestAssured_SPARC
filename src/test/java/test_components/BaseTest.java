@@ -4,13 +4,22 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
 
+import utilities.logging.ApiLogger;
+import utilities.reporting.Listeners;
+
 public class BaseTest {
+	// Delete this comment
 	public String uri = null;
 	public String version = null;
 	public String username = null;
 
+	/**
+	 * Reads System properties and reads from Config.properties file.
+	 * 
+	 */
 	@BeforeSuite(alwaysRun = true)
 	public void setProperties() {
 		String env = System.getProperty("env", "").trim();
@@ -20,11 +29,11 @@ public class BaseTest {
 			env = "qa";
 		}
 
-		if (env.toLowerCase() == "qa") {
+		if ("qa".equalsIgnoreCase(env)) {
 			this.uri = properties.getProperty("uri.qa");
-		} else if (env.toLowerCase() == "sandbox") {
+		} else if (env.equalsIgnoreCase("sandbox")) {
 			this.uri = properties.getProperty("uri.sandbox");
-		} else if (env.toLowerCase() == "production") {
+		} else if (env.equalsIgnoreCase("production")) {
 			this.uri = properties.getProperty("uri.production");
 		}
 
@@ -33,6 +42,13 @@ public class BaseTest {
 
 		this.version = properties.getProperty("version");
 		this.username = properties.getProperty("username");
+	}
+
+	@AfterMethod(alwaysRun = true)
+	public void tearDown() {
+		Listeners.threadLocal.remove(); // Clear ThreadLocal after each test for thread-saftey
+		Listeners.logger.remove();
+		ApiLogger.logger.remove();
 	}
 
 	/**
